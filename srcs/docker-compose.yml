@@ -1,6 +1,51 @@
 version: "3.3"  # optional since v1.27.0
 services:
   nginx:
+    image: nginx
+    depends_on:
+      - wordpress
+      - mariadb
+    container_name: nginx
     build: ./requirements/nginx/
     ports:
       - "443:443"
+    volumes:
+      - myapp:/var/www/html
+      # - type: bind
+      #   source: ./data/
+      #   target: /var/www/html/
+
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    ports:
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+
+  wordpress:
+    image: wordpress
+    # restart: always
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    build: ./requirements/wordpress/
+    ports:
+      - "9000:9000"
+    volumes:
+      - myapp:/var/www/html/
+      # - type: bind
+      #   source: ./data/
+      #   target: /home
+  # adminer:
+  #   image: adminer
+  #   container_name: adminer
+  #   depends_on:
+  #     - mariadb
+  #   ports:
+  #     - "8080:80"
+  #   build: ./requirements/bonus/adminer/
+volumes:
+  db:
+  myapp:

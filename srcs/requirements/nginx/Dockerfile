@@ -1,14 +1,11 @@
 FROM debian:buster
 
-RUN mkdir -p /etc/tmp
-COPY ./conf/ssl/server.conf /etc/tmp/
-RUN mkdir -p /etc/ssl /etc/ssl/private /etc/ssl/certs/ /etc/nginx
-
+RUN apt-get update && apt-get install -y nginx openssl;
+RUN mkdir -p /etc/ssl /etc/ssl/private /etc/ssl/certs/
 COPY ./conf/ssl/cert.crt /etc/ssl/certs/cert.crt
 COPY ./conf/ssl/key.key /etc/ssl/private/key.key
-
-COPY ./conf/ssl/dhparam.pem /etc/nginx/dhparam.pem
-COPY ./tools/setup.sh /etc/tmp
+COPY ./conf/ssl/server.conf /etc/nginx/sites-available/wordpress.conf
+RUN ln -s /etc/nginx/sites-available/wordpress.conf /etc/nginx/sites-enabled/
 EXPOSE 443
 
-ENTRYPOINT [ "/bin/sh", "/etc/tmp/setup.sh" ]
+CMD [ "nginx", "-g", "daemon off;" ]
