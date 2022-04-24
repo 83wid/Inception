@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:buster
 
 RUN mkdir -p /etc/tmp
 COPY ./conf/ssl/server.conf /etc/tmp/
