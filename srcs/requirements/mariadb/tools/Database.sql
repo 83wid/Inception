@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `inception`;
-CREATE USER IF NOT EXISTS 'nabouzah'@'%' IDENTIFIED BY 'Bewid.1337';
-GRANT ALL PRIVILEGES ON `inception`.* TO 'nabouzah'@'%';
+CREATE DATABASE IF NOT EXISTS `nabouzah`;
+CREATE USER IF NOT EXISTS 'nabouzah'@'%' IDENTIFIED BY 'nabouzah';
+GRANT ALL PRIVILEGES ON `nabouzah`.* TO 'nabouzah'@'%';
 FLUSH PRIVILEGES;
-use inception;
+use nabouzah;
