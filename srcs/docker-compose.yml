@@ -40,14 +40,16 @@ services:
       # - type: bind
       #   source: ./data/
       #   target: /home
-  # adminer:
-  #   image: adminer
-  #   container_name: adminer
-  #   depends_on:
-  #     - mariadb
-  #   ports:
-  #     - "8080:80"
-  #   build: ./requirements/bonus/adminer/
+  adminer:
+    image: adminer
+    container_name: adminer
+    depends_on:
+      - mariadb
+    ports:
+      - "8080:80"
+    build: ./requirements/bonus/adminer/
+    env_file:
+      - .env
 volumes:
   db:
   myapp:
