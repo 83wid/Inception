@@ -35,6 +35,8 @@ services:
       - 9000:9000
     volumes:
       - myapp:/var/www/html/
+    env_file:
+      - .env
       # - type: bind
       #   source: ./data/
       #   target: /home
