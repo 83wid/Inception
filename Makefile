@@ -2,7 +2,7 @@ FILE=srcs/docker-compose.yml
 NAMES = mariadb nginx wordpress adminer
 VLM = `docker volume ls -q`
 all:
-	docker-compose -f  $(FILE) up -d
+	docker-compose -f  $(FILE) up -d --build
 
 clean:
 	docker-compose -f $(FILE) down

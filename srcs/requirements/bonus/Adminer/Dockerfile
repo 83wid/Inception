@@ -1,6 +1,6 @@
 FROM debian:buster
 
-RUN apt-get update -y && apt-get upgrade && \
+RUN apt-get update -y && apt-get upgrade -y && \
 	apt-get install wget -y && \
 	apt-get install apache2 php libapache2-mod-php php-curl php-cli php-mysql php-gd mariadb-server -y
 
