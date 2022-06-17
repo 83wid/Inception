@@ -1,6 +1,8 @@
-version: "3.3"  # optional since v1.27.0
+version: "3.5"  # optional since v1.27.0
 services:
   nginx:
+    networks:
+      - inception_network
     image: nginx
     depends_on:
       - wordpress
@@ -11,11 +13,10 @@ services:
       - 443:443
     volumes:
       - myapp:/var/www/html
-      # - type: bind
-      #   source: ./data/
-      #   target: /var/www/html/
 
   mariadb:
+    networks:
+      - inception_network
     image: mariadb
     container_name: mariadb
     build: ./requirements/mariadb/
@@ -25,6 +26,8 @@ services:
       - db:/var/lib/mysql
 
   wordpress:
+    networks:
+      - inception_network
     image: wordpress
     # restart: always
     container_name: wordpress
@@ -37,10 +40,10 @@ services:
       - myapp:/var/www/html/
     env_file:
       - .env
-      # - type: bind
-      #   source: ./data/
-      #   target: /home
+
   adminer:
+    networks:
+      - inception_network
     image: adminer
     container_name: adminer
     depends_on:
@@ -53,3 +56,7 @@ services:
 volumes:
   db:
   myapp:
+networks:
+  inception_network:
+      name: 'inception_network'
+      driver: bridge
