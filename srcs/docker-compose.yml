@@ -53,6 +53,16 @@ services:
     build: ./requirements/bonus/adminer/
     env_file:
       - .env
+  redis:
+    depends_on:
+      - wordpress
+    networks:
+      - inception_network
+    image: redis
+    container_name: redis
+    build: ./requirements/bonus/redis/
+    ports:
+      - 6379:6379
 volumes:
   db:
   myapp:
