@@ -74,7 +74,7 @@ services:
   #   build: 
   #     context: ./requirements/bonus/website/
   #     args:
-  #       GITHUB_TOKEN: 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
+  #       GITHUB_TOKEN:
 
   #   container_name: website
   #   ports:
