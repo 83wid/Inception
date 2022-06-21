@@ -1,5 +1,5 @@
 FILE=srcs/docker-compose.yml
-NAMES = mariadb nginx wordpress adminer redis
+NAMES = mariadb nginx wordpress adminer redis website gitlab ftp
 VLM = `docker volume ls -q`
 all:
 	docker-compose -f  $(FILE) up -d --build

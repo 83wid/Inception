@@ -49,10 +49,52 @@ services:
     depends_on:
       - mariadb
     ports:
-      - "8080:80"
+      - 8080:80
     build: ./requirements/bonus/adminer/
     env_file:
       - .env
+
+  # gitlab:
+  #   networks:
+  #     - inception_network
+  #   image: gitlab
+  #   build: ./requirements/bonus/gitlab/
+  #   container_name: gitlab
+  #   ports:
+  #     - "9987:9987"
+  #     - "10011:10011"
+  #     - "30033:30033"
+  #   environment:
+  #     - GITLAB_ROOT_PASSWORD=root
+
+  # website:
+  #   networks:
+  #     - inception_network
+  #   image: website
+  #   build: 
+  #     context: ./requirements/bonus/website/
+  #     args:
+  #       GITHUB_TOKEN: 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
+
+  #   container_name: website
+  #   ports:
+  #     - 3000:3000
+  
+  ftp:
+    depends_on:
+      - wordpress
+    networks:
+      - inception_network
+    image: ftp
+    build: 
+      context: ./requirements/bonus/ftp/
+    volumes:
+      - myapp:/home/tin/ftp/files
+    container_name: ftp
+    ports:
+      - "20:20"
+      - "21:21"
+
   redis:
     depends_on:
       - wordpress
@@ -63,9 +105,11 @@ services:
     build: ./requirements/bonus/redis/
     ports:
       - 6379:6379
+
 volumes:
   db:
   myapp:
+
 networks:
   inception_network:
       name: 'inception_network'
