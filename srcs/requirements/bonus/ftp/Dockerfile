@@ -1,0 +1,28 @@
+FROM debian:buster
+
+# ARG FTP_USER
+RUN apt update
+RUN apt install vsftpd -y
+RUN cp /etc/vsftpd.conf /etc/vsftpd.conf.orig
+RUN echo "listen=YES" > /etc/vsftpd.conf
+RUN echo "listen_ipv6=NO" >> /etc/vsftpd.conf
+RUN echo "connect_from_port_20=YES" >> /etc/vsftpd.conf
+RUN echo "anonymous_enable=NO" >> /etc/vsftpd.conf
+RUN echo "local_enable=YES" >> /etc/vsftpd.conf
+RUN echo "write_enable=YES" >> /etc/vsftpd.conf
+RUN echo "chroot_local_user=YES" >> /etc/vsftpd.conf
+RUN echo "allow_writeable_chroot=YES" >> /etc/vsftpd.conf
+RUN echo "pam_service_name=vsftpd" >> /etc/vsftpd.conf
+RUN echo "pasv_enable=YES" >> /etc/vsftpd.conf
+RUN echo "pasv_min_port=40000" >> /etc/vsftpd.conf
+RUN echo "pasv_max_port=40005" >> /etc/vsftpd.conf
+RUN echo "userlist_enable=YES" >> /etc/vsftpd.conf
+RUN echo "userlist_file=/etc/vsftpd.userlist" >> /etc/vsftpd.conf
+RUN echo "userlist_deny=NO" >> /etc/vsftpd.conf
+# RUN echo "secure_chroot_dir=/home/nabouzah/ftp/" >> /etc/vsftpd.conf
+
+COPY ./tools/setup.sh /tmp
+
+EXPOSE 21
+EXPOSE 40000-40005
+CMD ["sh", "/tmp/setup.sh"]

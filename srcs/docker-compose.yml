@@ -1,6 +1,126 @@
-version: "3.3"  # optional since v1.27.0
+version: "3.5"  # optional since v1.27.0
 services:
   nginx:
+    networks:
+      - inception_network
+    image: nginx
+    depends_on:
+      - wordpress
+      - mariadb
+    container_name: nginx
     build: ./requirements/nginx/
     ports:
-      - "443:443"
+      - 443:443
+    volumes:
+      - myapp:/var/www/html
+
+  mariadb:
+    networks:
+      - inception_network
+    image: mariadb
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+
+  wordpress:
+    networks:
+      - inception_network
+    image: wordpress
+    # restart: always
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    build: ./requirements/wordpress/
+    ports:
+      - 9000:9000
+    volumes:
+      - myapp:/var/www/html/
+    env_file:
+      - .env
+
+  adminer:
+    networks:
+      - inception_network
+    image: adminer
+    container_name: adminer
+    depends_on:
+      - mariadb
+    ports:
+      - 8080:80
+    build: ./requirements/bonus/adminer/
+    env_file:
+      - .env
+
+  teamspeak:
+    networks:
+      - inception_network
+    image: teamspeak
+    build: ./requirements/bonus/teamspeak/
+    container_name: teamspeak
+    ports:
+      - "9987:9987/udp"
+      - "10011:10011"
+      - "30033:30033"
+
+  website:
+    networks:
+      - inception_network
+    image: website
+    build: 
+      context: ./requirements/bonus/website/
+      args:
+        GITHUB_TOKEN: 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
+
+    container_name: website
+    ports:
+      - 3000:3000
+  
+  ftp:
+    depends_on:
+      - wordpress
+    networks:
+      - inception_network
+    image: ftp
+    build: 
+      context: ./requirements/bonus/ftp/
+    volumes:
+      - myapp:/home/nabouzah/ftp/
+    container_name: ftp
+    ports:
+      - "21:21"
+      - "40000-40005:40000-40005"
+    env_file:
+      - .env
+
+  redis:
+    depends_on:
+      - wordpress
+    networks:
+      - inception_network
+    image: redis
+    container_name: redis
+    build: ./requirements/bonus/redis/
+    ports:
+      - 6379:6379
+
+volumes:
+  myapp:
+    driver: local
+    driver_opts:
+      type: 'none' 
+      o: bind
+      device: $HOME/data/wp
+  db:
+    driver: local
+    driver_opts:
+      type: 'none' 
+      o: bind
+      device: $HOME/data/db
+
+networks:
+  inception_network:
+      name: 'inception_network'
+      driver: bridge
